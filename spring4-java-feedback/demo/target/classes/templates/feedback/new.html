@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Lista de Feedbacks</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-5">
+    <h1 class="mb-4">Lista de Feedbacks</h1>
+
+    <h2>Criar Novo Feedback</h2>
+    <form th:action="@{/feedback}" th:object="${feedback}" method="post" class="mb-4">
+        <div class="form-group">
+            <label th:for="*{nomeUsuario}">Nome:</label>
+            <input type="text" th:field="*{nomeUsuario}" class="form-control" />
+            <div th:if="${#fields.hasErrors('nomeUsuario')}" th:errors="*{nomeUsuario}" class="text-danger"></div>
+        </div>
+
+        <div class="form-group">
+            <label th:for="*{comentario}">Comentário:</label>
+            <textarea th:field="*{comentario}" class="form-control"></textarea>
+            <div th:if="${#fields.hasErrors('comentario')}" th:errors="*{comentario}" class="text-danger"></div>
+        </div>
+
+        <div class="form-group">
+            <label th:for="*{avaliacao}">Avaliação:</label>
+            <input type="number" th:field="*{avaliacao}" min="1" max="5" class="form-control" />
+            <div th:if="${#fields.hasErrors('avaliacao')}" th:errors="*{avaliacao}" class="text-danger"></div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Criar</button>
+    </form>
+
+    <a href="/home" class="btn btn-secondary mb-3">Voltar</a>
+
+    <h2>Feedbacks Existentes</h2>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Nome</th>
+            <th>Comentário</th>
+            <th>Avaliação</th>
+            <th>Ações</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="feedback : ${feedbacks}">
+            <td th:text="${feedback.nomeUsuario}"></td>
+            <td th:text="${feedback.comentario}"></td>
+            <td th:text="${feedback.avaliacao}"></td>
+            <td>
+                <a th:href="@{/feedback/{id}/edit(id=${feedback.id})}" class="btn btn-warning btn-sm">Editar</a>
+                <form th:action="@{/feedback/{id}/delete(id=${feedback.id})}" method="post" style="display:inline;">
+                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Tem certeza que deseja excluir?');">Excluir</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
